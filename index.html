@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover"/>
+    <title>Poké transfer</title>
+  </head>
+  <body style="margin: 0;">
+    <div id="diagram" style="height: 100vh; width: 100vw">
+    </div>
+  </body>
+  <script src="./go.js"></script>
+    <script type="text/javascript">
+      function init() {
+        const $ = go.GraphObject.make
+
+        diagram = $(go.Diagram, "diagram", {
+          "toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom,
+          initialAutoScale: go.Diagram.Uniform,
+          hasHorizontalScrollbar: false,
+          hasVerticalScrollbar: false,
+        })
+
+        var nodeDataArray = [
+          { key: "gen1", isGroup: true, color: null, "img": "./img/en/Consoles/GameBoy.png" },
+          { key: "red", group: "gen1", img: "./img/en/Games/Red.webp" },
+          { key: "blue", group: "gen1", img: "./img/en/Games/Blue.webp" },
+          { key: "yellow", group: "gen1", img: "./img/en/Games/Yellow.webp" },
+
+          { key: "gen2", isGroup: true },
+          { key: "gen2-gb", isGroup: true, group: "gen2", "img": "./img/en/Consoles/GameBoy.png" },
+          { key: "gen2-gbc", isGroup: true, group: "gen2", "img": "./img/en/Consoles/GameBoy-Color.png" },
+          { key: "gold", group: "gen2-gb", img: "./img/en/Games/Gold.webp" },
+          { key: "silver", group: "gen2-gb", img: "./img/en/Games/Silver.webp" },
+          { key: "crystal", group: "gen2-gbc", img: "./img/en/Games/Crystal.webp" },
+        ]
+
+        var linkDataArray = [
+          { from: "gen1", to: "gen2"},
+        ]
+
+        diagram.nodeTemplate = $(go.Node, "Auto",
+          $(go.Shape, "RoundedRectangle", { fill: null, stroke: null }),
+          $(go.Picture, { source: "", width: 100, height: 100, imageStretch: go.GraphObject.Uniform},
+            new go.Binding("source", "img")
+          )
+        )
+
+        diagram.groupTemplate = $(go.Group, "Vertical",
+          $(go.Picture, { alignment: go.Spot.Left, source: "", width: 100, height: 20, imageStretch: go.GraphObject.Uniform },
+            new go.Binding("source", "img")
+          ),
+          $(go.Panel, "Auto",
+            $(go.Shape, "RoundedRectangle", { fill: null },
+              new go.Binding("fill", "color")
+            ),
+            $(go.Placeholder, { padding: 5 })
+          )
+        )
+        diagram.model = new go.GraphLinksModel(nodeDataArray, linkDataArray)
+      }
+
+      init()
+    </script>
+</html>
